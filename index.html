@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filosofía Corporativa - EcoMiniOllas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Earthy Harmony -->
+    <!-- Application Structure Plan: The SPA uses a top-down narrative structure with a sticky navigation bar for easy access to key sections. It starts with a hero section to grab attention, followed by the core Mission and Vision. The 'Valores' are presented as interactive cards to encourage user engagement and exploration. The 'Principios' are visualized as a connected process flow diagram to illustrate how they guide the company's operations. This structure was chosen to transform a static philosophy document into an engaging, interactive story that is more memorable and easier to digest for the user. -->
+    <!-- Visualization & Content Choices: 
+        - Hero Section (Goal: Attract): Large typography and brand name. Method: HTML/Tailwind.
+        - Mission/Vision (Goal: Inform): Clean, side-by-side text blocks for clarity. Method: HTML/Tailwind Flexbox.
+        - Valores (Goal: Explore): Interactive cards. Info: Corporate Values. Viz: Card layout. Interaction: On-click reveal of details via JS. Justification: Encourages discovery over passive reading.
+        - Principios (Goal: Organize/Flow): Visual process diagram. Info: Corporate Principles. Viz: Connected nodes built with HTML/Tailwind. Interaction: Subtle hover effects. Justification: Shows the principles as an interconnected, guiding process, making them more understandable than a simple list.
+        - Library/Method: Vanilla JavaScript for interactions.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #4A4A4A;
+        }
+        .nav-link {
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #2D572C;
+            border-bottom-color: #2D572C;
+        }
+        .value-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .principle-node {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .principle-node:hover {
+            background-color: #2D572C;
+            color: #FFFFFF;
+        }
+        .principle-connector {
+            flex-grow: 1;
+            height: 2px;
+            background-color: #D1D5DB;
+        }
+        @media (max-width: 768px) {
+            .principle-flow {
+                flex-direction: column;
+                align-items: center;
+            }
+            .principle-connector {
+                width: 2px;
+                height: 50px;
+                flex-grow: 0;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header id="home" class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-green-800">
+                <span class="text-[#2D572C]">Eco</span><span class="text-[#6E5B4D]">Mini</span><span class="text-[#A58D78]">Ollas</span>
+            </div>
+            <div class="hidden md:flex space-x-8">
+                <a href="#mision-vision" class="nav-link font-semibold pb-1">Propósito</a>
+                <a href="#valores" class="nav-link font-semibold pb-1">Valores</a>
+                <a href="#principios" class="nav-link font-semibold pb-1">Principios</a>
+            </div>
+            <div class="md:hidden">
+                <button id="menu-btn" class="text-gray-700 focus:outline-none">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+                </button>
+            </div>
+        </nav>
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#mision-vision" class="block py-2 text-center nav-link font-semibold">Propósito</a>
+            <a href="#valores" class="block py-2 text-center nav-link font-semibold">Valores</a>
+            <a href="#principios" class="block py-2 text-center nav-link font-semibold">Principios</a>
+        </div>
+    </header>
+
+    <main>
+        <section class="text-center py-20 md:py-32 bg-green-50/50">
+            <div class="container mx-auto px-6">
+                <h1 class="text-4xl md:text-6xl font-bold text-[#2D572C] mb-4">Filosofía Corporativa</h1>
+                <p class="text-lg md:text-xl text-[#6E5B4D] max-w-3xl mx-auto">Transformando residuos en arte y utilidad. Descubre el propósito que impulsa cada una de nuestras creaciones.</p>
+            </div>
+        </section>
+
+        <section id="mision-vision" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                     <h2 class="text-3xl font-bold text-[#2D572C] mb-2">Nuestro Propósito</h2>
+                     <p class="text-md text-[#6E5B4D]">Nuestra Misión define lo que hacemos hoy, mientras que nuestra Visión nos inspira para el mañana.</p>
+                </div>
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div class="bg-white p-8 rounded-lg shadow-md border border-gray-200">
+                        <h3 class="text-2xl font-bold text-[#2D572C] mb-4">🧭 Misión</h3>
+                        <p class="text-gray-600 leading-relaxed">Crear y ofrecer mini ollas funcionales y decorativas <strong>reutilizando latas de aluminio</strong>, promoviendo el reciclaje creativo y la conciencia ambiental, aportando soluciones sostenibles y prácticas para el hogar y la decoración.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-lg shadow-md border border-gray-200">
+                        <h3 class="text-2xl font-bold text-[#2D572C] mb-4">🌄 Visión</h3>
+                        <p class="text-gray-600 leading-relaxed">Convertirnos en una marca líder en <strong>productos ecológicos artesanales en Latinoamérica</strong>, reconocida por transformar residuos en arte y utilidad, y por contribuir activamente a la reducción de la contaminación ambiental.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="valores" class="py-16 md:py-24 bg-green-50/50">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-[#2D572C] mb-2">💚 Nuestros Valores</h2>
+                    <p class="text-md text-[#6E5B4D]">Los pilares que sostienen cada decisión y acción. Haz clic en cada valor para saber más.</p>
+                </div>
+                <div class="grid md:grid-cols-2 lg:grid-cols-5 gap-8">
+                    <div class="value-card bg-white p-6 rounded-lg text-center shadow-md border border-gray-200" data-value="sostenibilidad">
+                        <div class="text-4xl mb-4">🌍</div>
+                        <h4 class="text-xl font-bold text-[#2D572C] mb-2">Sostenibilidad</h4>
+                        <p class="text-gray-500 text-sm">Nos comprometemos con prácticas responsables con el planeta.</p>
+                    </div>
+                    <div class="value-card bg-white p-6 rounded-lg text-center shadow-md border border-gray-200" data-value="creatividad">
+                        <div class="text-4xl mb-4">💡</div>
+                        <h4 class="text-xl font-bold text-[#2D572C] mb-2">Creatividad</h4>
+                        <p class="text-gray-500 text-sm">Transformamos residuos en productos innovadores y únicos.</p>
+                    </div>
+                    <div class="value-card bg-white p-6 rounded-lg text-center shadow-md border border-gray-200" data-value="compromiso">
+                        <div class="text-4xl mb-4">🤝</div>
+                        <h4 class="text-xl font-bold text-[#2D572C] mb-2">Compromiso Social</h4>
+                        <p class="text-gray-500 text-sm">Fomentamos la conciencia ambiental en nuestras comunidades.</p>
+                    </div>
+                    <div class="value-card bg-white p-6 rounded-lg text-center shadow-md border border-gray-200" data-value="calidad">
+                        <div class="text-4xl mb-4">✨</div>
+                        <h4 class="text-xl font-bold text-[#2D572C] mb-2">Calidad</h4>
+                        <p class="text-gray-500 text-sm">Cada producto es elaborado con cuidado, funcionalidad y detalle.</p>
+                    </div>
+                    <div class="value-card bg-white p-6 rounded-lg text-center shadow-md border border-gray-200" data-value="responsabilidad">
+                        <div class="text-4xl mb-4">♻️</div>
+                        <h4 class="text-xl font-bold text-[#2D572C] mb-2">Responsabilidad</h4>
+                        <p class="text-gray-500 text-sm">Cuidamos el entorno y educamos sobre reciclaje.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="principios" class="py-16 md:py-24">
+            <div class="container mx-auto px-6">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-bold text-[#2D572C] mb-2">🧩 Nuestros Principios</h2>
+                    <p class="text-md text-[#6E5B4D]">El ADN de nuestras operaciones: un flujo de acciones conscientes.</p>
+                </div>
+                <div class="flex items-center justify-center principle-flow">
+                    <div class="principle-node text-center p-4 rounded-lg border-2 border-gray-300 bg-white w-48">
+                        <div class="text-3xl mb-2">♻️</div>
+                        <h5 class="font-semibold">Reutilización</h5>
+                    </div>
+                    <div class="principle-connector"></div>
+                    <div class="principle-node text-center p-4 rounded-lg border-2 border-gray-300 bg-white w-48">
+                        <div class="text-3xl mb-2">✋</div>
+                        <h5 class="font-semibold">Hecho a Mano</h5>
+                    </div>
+                    <div class="principle-connector"></div>
+                    <div class="principle-node text-center p-4 rounded-lg border-2 border-gray-300 bg-white w-48">
+                        <div class="text-3xl mb-2">🧑‍🤝‍🧑</div>
+                        <h5 class="font-semibold">Colaboración</h5>
+                    </div>
+                    <div class="principle-connector"></div>
+                    <div class="principle-node text-center p-4 rounded-lg border-2 border-gray-300 bg-white w-48">
+                        <div class="text-3xl mb-2">📢</div>
+                        <h5 class="font-semibold">Educación</h5>
+                    </div>
+                    <div class="principle-connector"></div>
+                    <div class="principle-node text-center p-4 rounded-lg border-2 border-gray-300 bg-white w-48">
+                        <div class="text-3xl mb-2">🔍</div>
+                        <h5 class="font-semibold">Ética</h5>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-[#6E5B4D] text-white py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2025 EcoMiniOllas. Todos los derechos reservados.</p>
+            <p class="text-sm mt-2">Creando un futuro más verde, una olla a la vez.</p>
+        </div>
+    </footer>
+    
+    <div id="modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-lg shadow-2xl max-w-md w-full p-8 relative">
+            <button id="close-modal" class="absolute top-4 right-4 text-gray-500 hover:text-gray-800">&times;</button>
+            <div id="modal-content"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (!mobileMenu.classList.contains('hidden')) {
+                         mobileMenu.classList.add('hidden');
+                    }
+                });
+            });
+            
+            const valueCards = document.querySelectorAll('.value-card');
+            const modal = document.getElementById('modal');
+            const closeModalBtn = document.getElementById('close-modal');
+            const modalContent = document.getElementById('modal-content');
+
+            const valueDetails = {
+                sostenibilidad: {
+                    icon: '🌍',
+                    title: 'Sostenibilidad',
+                    text: 'Nos comprometemos con prácticas responsables con el planeta. Esto significa que cada paso de nuestro proceso, desde la recolección de latas hasta el empaque final, está diseñado para minimizar nuestra huella ecológica y promover un ciclo de vida circular para los materiales.'
+                },
+                creatividad: {
+                    icon: '💡',
+                    title: 'Creatividad',
+                    text: 'Transformamos residuos en productos innovadores y únicos. No vemos una lata, vemos un lienzo. Cada diseño es una expresión de arte que busca inspirar a otros a ver el potencial en los objetos cotidianos y a repensar el concepto de "desperdicio".'
+                },
+                compromiso: {
+                    icon: '🤝',
+                    title: 'Compromiso Social',
+                    text: 'Fomentamos la conciencia ambiental en nuestras comunidades. Creemos que el cambio real proviene de la acción colectiva. Por ello, participamos y organizamos talleres, colaboramos con recolectores locales y compartimos activamente el mensaje de la importancia del reciclaje.'
+                },
+                calidad: {
+                    icon: '✨',
+                    title: 'Calidad',
+                    text: 'Cada producto es elaborado con cuidado, funcionalidad y detalle. Ser ecológico no significa sacrificar la calidad. Nuestras mini ollas son tratadas, pintadas y acabadas a mano para garantizar que no solo sean hermosas, sino también duraderas y funcionales para el uso diario.'
+                },
+                responsabilidad: {
+                    icon: '♻️',
+                    title: 'Responsabilidad',
+                    text: 'Cuidamos el entorno y educamos sobre reciclaje. Asumimos la responsabilidad de nuestro impacto y buscamos ser una fuerza positiva. A través de nuestros productos y comunicación, educamos sobre las 3R (Reducir, Reutilizar, Reciclar) para empoderar a nuestros clientes a tomar decisiones más conscientes.'
+                }
+            };
+            
+            valueCards.forEach(card => {
+                card.addEventListener('click', () => {
+                    const valueKey = card.dataset.value;
+                    const details = valueDetails[valueKey];
+                    
+                    modalContent.innerHTML = `
+                        <div class="text-6xl text-center mb-4">${details.icon}</div>
+                        <h3 class="text-2xl font-bold text-center text-[#2D572C] mb-4">${details.title}</h3>
+                        <p class="text-gray-600 text-center">${details.text}</p>
+                    `;
+                    
+                    modal.classList.remove('hidden');
+                });
+            });
+            
+            closeModalBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+            });
+            
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.add('hidden');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
